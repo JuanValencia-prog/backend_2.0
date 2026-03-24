@@ -1,16 +1,14 @@
 spring:
-  application:
-    name: product-purchasing-system
   datasource:
     url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:pps_db}?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: ${DB_USER:user_pps}
-    password: ${DB_PASSWORD:User@2026!}
+    password: ${DB_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: ${DB_DDL_AUTO:update}
+      ddl-auto: none
     open-in-view: false
-    show-sql: ${DB_SHOW_SQL:true}
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
@@ -21,7 +19,8 @@ spring:
 
 logging:
   level:
-    co.edu.cesde.pps: DEBUG
-    org.hibernate.SQL: ${LOG_SQL_LEVEL:DEBUG}
-    org.hibernate.orm.jdbc.bind: ${LOG_SQL_BIND_LEVEL:TRACE}
+    root: INFO
+    co.edu.cesde.pps: INFO
+    org.hibernate.SQL: WARN
+    org.hibernate.orm.jdbc.bind: WARN
 
