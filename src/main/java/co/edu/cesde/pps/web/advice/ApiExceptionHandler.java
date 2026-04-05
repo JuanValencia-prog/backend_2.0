@@ -1,6 +1,7 @@
 package co.edu.cesde.pps.web.advice;
 
 import co.edu.cesde.pps.exception.AuthenticationException;
+import co.edu.cesde.pps.exception.AuthorizationException;
 import co.edu.cesde.pps.exception.ValidationException;
 import co.edu.cesde.pps.web.dto.error.ApiErrorCode;
 import co.edu.cesde.pps.web.dto.error.ApiErrorResponse;
@@ -77,6 +78,12 @@ public class ApiExceptionHandler {
         return buildErrorResponse(exception, request);
     }
 
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<ApiErrorResponse> handleAuthorization(AuthorizationException exception,
+                                                                HttpServletRequest request) {
+        return buildErrorResponse(exception, request);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleAnyException(Exception exception,
                                                                HttpServletRequest request) {
@@ -96,6 +103,7 @@ public class ApiExceptionHandler {
             case RESOURCE_NOT_FOUND -> HttpStatus.NOT_FOUND;
             case DUPLICATE_RESOURCE, INSUFFICIENT_STOCK, INVALID_CART_STATE, CART_MERGE_ERROR -> HttpStatus.CONFLICT;
             case UNAUTHORIZED -> HttpStatus.UNAUTHORIZED;
+            case FORBIDDEN -> HttpStatus.FORBIDDEN;
             case INTERNAL_SERVER_ERROR -> HttpStatus.INTERNAL_SERVER_ERROR;
         };
     }

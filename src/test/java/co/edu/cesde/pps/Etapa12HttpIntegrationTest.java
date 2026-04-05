@@ -2,8 +2,10 @@ package co.edu.cesde.pps;
 
 import co.edu.cesde.pps.application.CatalogApplicationService;
 import co.edu.cesde.pps.enums.AddressType;
+import co.edu.cesde.pps.enums.UserStatus;
 import co.edu.cesde.pps.model.OrderStatus;
 import co.edu.cesde.pps.model.Role;
+import co.edu.cesde.pps.model.User;
 import co.edu.cesde.pps.repository.AddressRepository;
 import co.edu.cesde.pps.repository.CartRepository;
 import co.edu.cesde.pps.repository.CategoryRepository;
@@ -13,10 +15,13 @@ import co.edu.cesde.pps.repository.ProductRepository;
 import co.edu.cesde.pps.repository.RoleRepository;
 import co.edu.cesde.pps.repository.UserRepository;
 import co.edu.cesde.pps.repository.UserSessionRepository;
+import co.edu.cesde.pps.security.PasswordHasher;
+import co.edu.cesde.pps.service.UserSessionService;
 import co.edu.cesde.pps.web.dto.request.CategoryUpsertRequest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -79,6 +84,14 @@ class Etapa12HttpIntegrationTest {
     @Autowired
     private OrderStatusRepository orderStatusRepository;
 
+    @Autowired
+    private PasswordHasher passwordHasher;
+
+    @Autowired
+    private UserSessionService userSessionService;
+
+    private String adminToken;
+
     @BeforeEach
     void setUp() {
         orderRepository.deleteAll();
@@ -91,6 +104,11 @@ class Etapa12HttpIntegrationTest {
         orderStatusRepository.deleteAll();
         roleRepository.deleteAll();
 
+        Role adminRole = roleRepository.save(Role.builder()
+                .name("ADMIN")
+                .description("Administrator user")
+                .build());
+
         roleRepository.save(Role.builder()
                 .name("CUSTOMER")
                 .description("Regular customer user")
@@ -100,6 +118,19 @@ class Etapa12HttpIntegrationTest {
                 .name("PENDING")
                 .description("Order created, awaiting payment")
                 .build());
+
+        User adminUser = userRepository.save(User.builder()
+                .role(adminRole)
+                .email("admin@cesde.edu.co")
+                .passwordHash(passwordHasher.hash("secret123"))
+                .firstName("Admin")
+                .lastName("Principal")
+                .phone("3001234567")
+                .status(UserStatus.ACTIVE)
+                .createdAt(LocalDateTime.now())
+                .build());
+
+        adminToken = userSessionService.createAuthenticatedSession(adminUser).getSessionToken();
     }
 
     @Test
@@ -426,6 +457,7 @@ class Etapa12HttpIntegrationTest {
                 .andExpect(jsonPath("$.shippingAddress.id").value(shippingAddressId));
 
         MvcResult updatedProductResult = mockMvc.perform(put("/api/v1/admin/products/{id}", secondProductId)
+                        .header(HttpHeaders.AUTHORIZATION, bearer(adminToken))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(productPayload(childCategoryId, "KEY-001", "Teclado Mecanico RGB", 10, true)))
                 .andExpect(status().isOk())
@@ -438,7 +470,8 @@ class Etapa12HttpIntegrationTest {
         MvcResult disposableProductResult = createProduct(rootCategoryId, "PAD-001", "Mouse Pad", 5, true);
         Long disposableProductId = readJson(disposableProductResult).path("id").asLong();
 
-        mockMvc.perform(delete("/api/v1/admin/products/{id}", disposableProductId))
+        mockMvc.perform(delete("/api/v1/admin/products/{id}", disposableProductId)
+                        .header(HttpHeaders.AUTHORIZATION, bearer(adminToken)))
                 .andExpect(status().isNoContent());
 
         mockMvc.perform(get("/api/v1/products/{id}", disposableProductId))
@@ -491,6 +524,7 @@ class Etapa12HttpIntegrationTest {
                 .andExpect(jsonPath("$.code").value("RESOURCE_NOT_FOUND"));
 
         mockMvc.perform(post("/api/v1/admin/products")
+                        .header(HttpHeaders.AUTHORIZATION, bearer(adminToken))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(productPayload(categoryId, "STK-001", "Sku Duplicado", 2, true)))
                 .andExpect(status().isConflict())
@@ -520,6 +554,7 @@ class Etapa12HttpIntegrationTest {
 
     private MvcResult createProduct(Long categoryId, String sku, String name, int stockQty, boolean isActive) throws Exception {
         return mockMvc.perform(post("/api/v1/admin/products")
+                        .header(HttpHeaders.AUTHORIZATION, bearer(adminToken))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(productPayload(categoryId, sku, name, stockQty, isActive)))
                 .andExpect(status().isCreated())

@@ -2,7 +2,7 @@
 
 ## Objetivo
 
-Este documento resume, endpoint por endpoint, la API HTTP disponible al cerrar `etapa12`.
+Este documento resume, endpoint por endpoint, la API HTTP disponible al cerrar `etapa13`.
 
 Está pensado para el equipo de frontend y QA como referencia rápida del backend funcional.
 
@@ -37,6 +37,7 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
 ### Códigos de error usados
 - `VALIDATION_ERROR` → `400`
 - `UNAUTHORIZED` → `401`
+- `FORBIDDEN` → `403`
 - `RESOURCE_NOT_FOUND` → `404`
 - `DUPLICATE_RESOURCE` → `409`
 - `INSUFFICIENT_STOCK` → `409`
@@ -447,25 +448,31 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
 
 # 7. Admin Products
 
-> En esta etapa no hay autorización por rol robusta. Los endpoints admin existen para integración funcional y pruebas, pero la protección fina por permisos queda para una etapa posterior.
+> En `etapa13`, estos endpoints requieren usuario autenticado con rol `ADMIN`.
 
 ## 7.1 Crear producto
 - **POST** `/api/v1/admin/products`
-- **Auth requerida:** no a nivel framework actual
+- **Auth requerida:** sí
+- **Rol requerido:** `ADMIN`
 - **Body:** JSON
 - **Response:** `201 Created`
+- **Errores relevantes:** `401 Unauthorized`, `403 Forbidden`
 
 ## 7.2 Actualizar producto
 - **PUT** `/api/v1/admin/products/{id}`
-- **Auth requerida:** no a nivel framework actual
+- **Auth requerida:** sí
+- **Rol requerido:** `ADMIN`
 - **Body:** JSON
 - **Response:** `200 OK`
+- **Errores relevantes:** `401 Unauthorized`, `403 Forbidden`
 
 ## 7.3 Eliminar producto
 - **DELETE** `/api/v1/admin/products/{id}`
-- **Auth requerida:** no a nivel framework actual
+- **Auth requerida:** sí
+- **Rol requerido:** `ADMIN`
 - **Body:** no
 - **Response:** `204 No Content`
+- **Errores relevantes:** `401 Unauthorized`, `403 Forbidden`
 
 ### Body crear/actualizar producto
 ```json
@@ -501,7 +508,7 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
 
 ## Pendientes fuera de alcance de etapa12
 
-1. autorización admin robusta por rol
+1. endurecimiento avanzado de autorización y permisos finos por recurso
 2. Spring Security completa
 3. CORS y hardening final
 4. OpenAPI / Swagger
