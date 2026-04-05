@@ -170,6 +170,22 @@ public class UserService {
     }
 
     /**
+     * Actualiza el hash de contraseña de un usuario.
+     *
+     * @param userId ID del usuario
+     * @param passwordHash Nuevo hash de contraseña
+     * @throws EntityNotFoundException si no existe
+     */
+    @Transactional
+    public void updatePasswordHash(Long userId, String passwordHash) {
+        ValidationUtils.validateNotBlank(passwordHash, "passwordHash");
+
+        User user = findUserEntityOrThrow(userId);
+        user.setPasswordHash(passwordHash);
+        userRepository.save(user);
+    }
+
+    /**
      * Elimina un usuario (soft delete cambiando estado).
      *
      * @param userId ID del usuario
