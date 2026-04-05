@@ -106,6 +106,7 @@ mvn clean compile
 - **Resumen Etapa 12:** [`ETAPA12_SUMMARY.md`](ETAPA12_SUMMARY.md)
 - **Paso a paso estudiantes etapa12:** [`documents_external/ETAPA12_PASO_A_PASO_ESTUDIANTES.md`](documents_external/ETAPA12_PASO_A_PASO_ESTUDIANTES.md)
 - **Archivos modificados estudiantes etapa12:** [`documents_external/ETAPA12_ARCHIVOS_MODIFICADOS_Estudiantes.md`](documents_external/ETAPA12_ARCHIVOS_MODIFICADOS_Estudiantes.md)
+- **Handoff de continuidad etapa12:** [`ETAPA12_HANDOFF_CONTINUIDAD.md`](ETAPA12_HANDOFF_CONTINUIDAD.md)
 
 ## 🎯 Características clave del modelo
 
