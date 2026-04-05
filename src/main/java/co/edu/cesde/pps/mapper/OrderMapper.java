@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
  */
 public class OrderMapper {
 
+    private final AddressMapper addressMapper = new AddressMapper();
+
 
     /**
      * Convierte Order Entity a OrderDTO.
@@ -46,9 +48,13 @@ public class OrderMapper {
             dto.setOrderStatusName(order.getOrderStatus().getName());
         }
 
-        // shippingAddress / billingAddress: se mantienen como AddressDTO en el DTO.
-        // En esta etapa, este mapper no hace la conversión completa de Address -> AddressDTO.
-        // (Se suele resolver en el servicio con AddressMapper o endpoints dedicados.)
+        if (order.getShippingAddress() != null) {
+            dto.setShippingAddress(addressMapper.toDTO(order.getShippingAddress()));
+        }
+
+        if (order.getBillingAddress() != null) {
+            dto.setBillingAddress(addressMapper.toDTO(order.getBillingAddress()));
+        }
 
         dto.setCreatedAt(order.getCreatedAt());
 
