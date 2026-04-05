@@ -103,6 +103,9 @@ mvn clean compile
 - **Brechas antes de controllers REST:** [`documents_external/ETAPA11_BRECHAS_DOMINIO_ACTUAL.md`](documents_external/ETAPA11_BRECHAS_DOMINIO_ACTUAL.md)
 - **Contrato API completo etapa11:** [`documents_external/ETAPA11_CONTRATO_API_COMPLETO.md`](documents_external/ETAPA11_CONTRATO_API_COMPLETO.md)
 - **Estrategia DTOs request/response etapa11:** [`documents_external/ETAPA11_ESTRATEGIA_DTOS_REQUEST_RESPONSE.md`](documents_external/ETAPA11_ESTRATEGIA_DTOS_REQUEST_RESPONSE.md)
+- **Resumen Etapa 12:** [`ETAPA12_SUMMARY.md`](ETAPA12_SUMMARY.md)
+- **Paso a paso estudiantes etapa12:** [`documents_external/ETAPA12_PASO_A_PASO_ESTUDIANTES.md`](documents_external/ETAPA12_PASO_A_PASO_ESTUDIANTES.md)
+- **Archivos modificados estudiantes etapa12:** [`documents_external/ETAPA12_ARCHIVOS_MODIFICADOS_Estudiantes.md`](documents_external/ETAPA12_ARCHIVOS_MODIFICADOS_Estudiantes.md)
 
 ## 🎯 Características clave del modelo
 
