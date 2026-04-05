@@ -100,6 +100,7 @@ mvn clean compile
 - **Resumen Etapa 11:** [`ETAPA11_SUMMARY.md`](ETAPA11_SUMMARY.md)
 - **Resumen Etapa 12:** [`ETAPA12_SUMMARY.md`](ETAPA12_SUMMARY.md)
 - **Resumen Etapa 13:** [`ETAPA13_SUMMARY.md`](ETAPA13_SUMMARY.md)
+- **Resumen Etapa 14:** [`ETAPA14_SUMMARY.md`](ETAPA14_SUMMARY.md)
 - **Referencia de endpoints backend:** [`BACKEND_ENDPOINTS_REFRENCE.md`](BACKEND_ENDPOINTS_REFRENCE.md)
 - **Notas operativas locales:** `documents_external/` se conserva solo como apoyo local y no se versiona.
 

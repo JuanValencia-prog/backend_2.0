@@ -70,6 +70,13 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
 - **Body:** JSON
 - **Response:** `201 Created`
 
+### Respuesta esperada
+- `sessionToken`
+- `sessionId`
+- `expiresAt`
+- `user`
+- `cart`
+
 ### Body
 ```json
 {
@@ -93,6 +100,13 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
 - **Auth requerida:** no
 - **Body:** JSON
 - **Response:** `200 OK`
+
+### Respuesta esperada
+- `sessionToken`
+- `sessionId`
+- `expiresAt`
+- `user`
+- `cart`
 
 ### Body
 ```json
@@ -126,6 +140,9 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
 - `status`
 - `createdAt`
 
+### Regla
+- `fullName` ya es calculado y devuelto por backend; frontend no necesita construirlo
+
 ---
 
 ## 1.5 Logout
@@ -133,6 +150,67 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
 - **Auth requerida:** sí
 - **Body:** no
 - **Response:** `204 No Content`
+
+---
+
+## 1.6 Actualizar perfil del usuario autenticado
+- **PUT** `/api/v1/users/me`
+- **Auth requerida:** sí
+- **Body:** JSON
+- **Response:** `200 OK`
+
+### Body
+```json
+{
+  "firstName": "Ada",
+  "lastName": "Lovelace",
+  "phone": "3001234567"
+}
+```
+
+### Respuesta
+```json
+{
+  "id": 1,
+  "email": "ada@cesde.edu.co",
+  "firstName": "Ada",
+  "lastName": "Lovelace",
+  "fullName": "Ada Lovelace",
+  "role": "CUSTOMER",
+  "phone": "3001234567",
+  "status": "ACTIVE",
+  "createdAt": "2026-04-05T14:30:00"
+}
+```
+
+### Errores esperados
+- `400 VALIDATION_ERROR`
+- `401 UNAUTHORIZED`
+
+---
+
+## 1.7 Cambiar contraseña del usuario autenticado
+- **PUT** `/api/v1/users/me/password`
+- **Auth requerida:** sí
+- **Body:** JSON
+- **Response:** `204 No Content`
+
+### Body
+```json
+{
+  "currentPassword": "secret123",
+  "newPassword": "secret456"
+}
+```
+
+### Reglas
+- `currentPassword` debe coincidir con la contraseña actual del usuario autenticado
+- `newPassword` debe tener mínimo 8 caracteres
+- el cambio de contraseña no invalida automáticamente la sesión actual en `etapa14`
+
+### Errores esperados
+- `400 VALIDATION_ERROR`
+- `401 UNAUTHORIZED`
 
 ---
 
