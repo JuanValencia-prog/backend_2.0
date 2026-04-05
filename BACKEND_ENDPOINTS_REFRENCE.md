@@ -1,4 +1,4 @@
-# ETAPA 12 - Referencia operativa de endpoints
+# BACKEND_ENDPOINTS_REFRENCE - Referencia operativa de endpoints
 
 ## Objetivo
 
@@ -507,4 +507,5 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
 4. OpenAPI / Swagger
 5. pagos reales
 6. refresh token / revocación avanzada
+
 
