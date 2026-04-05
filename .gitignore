@@ -47,4 +47,8 @@ src/main/resources/META-INF/persistence.xml
 SECURITY.md
 
 ### Documentation (external reference) ###
-documents_external/
+documents_external/*
+!documents_external/ETAPA11_BRECHAS_DOMINIO_ACTUAL.md
+!documents_external/ETAPA11_CONTRATO_API_COMPLETO.md
+!documents_external/ETAPA11_ESTRATEGIA_DTOS_REQUEST_RESPONSE.md
+documents_external/legacy/

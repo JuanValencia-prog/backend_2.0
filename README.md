@@ -40,7 +40,7 @@ Configuración Maven básica y estructura de directorios
 - Lombok para reducir boilerplate
 - Variables de entorno para configuración DB
 - Bean Validation API
-- Ver [ROADMAP.md](ROADMAP.md) para detalles
+- Ver roadmap futuro del proyecto (pendiente de documentar en archivo dedicado)
 
 ## 🗂️ Modelo E-R
 
@@ -98,7 +98,11 @@ mvn clean compile
 
 - **Modelo E-R completo:** [`documents_external/er_model_documentation.md`](documents_external/er_model_documentation.md)
 - **Diagrama visual:** [`documents_external/modelo_er_store.png`](documents_external/modelo_er_store.png)
-- **Roadmap Etapa 3:** [`ROADMAP.md`](ROADMAP.md) (se creará en etapa02)
+- **Roadmap Etapa 3:** pendiente de documentar en archivo dedicado
+- **Resumen Etapa 11:** [`ETAPA11_SUMMARY.md`](ETAPA11_SUMMARY.md)
+- **Brechas antes de controllers REST:** [`documents_external/ETAPA11_BRECHAS_DOMINIO_ACTUAL.md`](documents_external/ETAPA11_BRECHAS_DOMINIO_ACTUAL.md)
+- **Contrato API completo etapa11:** [`documents_external/ETAPA11_CONTRATO_API_COMPLETO.md`](documents_external/ETAPA11_CONTRATO_API_COMPLETO.md)
+- **Estrategia DTOs request/response etapa11:** [`documents_external/ETAPA11_ESTRATEGIA_DTOS_REQUEST_RESPONSE.md`](documents_external/ETAPA11_ESTRATEGIA_DTOS_REQUEST_RESPONSE.md)
 
 ## 🎯 Características clave del modelo
 
