@@ -40,7 +40,7 @@ Configuración Maven básica y estructura de directorios
 - Lombok para reducir boilerplate
 - Variables de entorno para configuración DB
 - Bean Validation API
-- Ver [ROADMAP.md](ROADMAP.md) para detalles
+- Ver roadmap futuro del proyecto (pendiente de documentar en archivo dedicado)
 
 ## 🗂️ Modelo E-R
 
@@ -96,9 +96,11 @@ mvn clean compile
 
 ## 📚 Documentación adicional
 
-- **Modelo E-R completo:** [`documents_external/er_model_documentation.md`](documents_external/er_model_documentation.md)
-- **Diagrama visual:** [`documents_external/modelo_er_store.png`](documents_external/modelo_er_store.png)
-- **Roadmap Etapa 3:** [`ROADMAP.md`](ROADMAP.md) (se creará en etapa02)
+- **Roadmap Etapa 3:** pendiente de documentar en archivo dedicado
+- **Resumen Etapa 11:** [`ETAPA11_SUMMARY.md`](ETAPA11_SUMMARY.md)
+- **Resumen Etapa 12:** [`ETAPA12_SUMMARY.md`](ETAPA12_SUMMARY.md)
+- **Referencia de endpoints etapa12:** [`ETAPA12_ENDPOINTS_REFERENCE.md`](ETAPA12_ENDPOINTS_REFERENCE.md)
+- **Notas operativas locales:** `documents_external/` se conserva solo como apoyo local y no se versiona.
 
 ## 🎯 Características clave del modelo
 
@@ -114,7 +116,7 @@ Cuando un invitado se registra y ya tiene un carrito abierto:
 3. El carrito invitado se marca como `abandoned`
 4. El usuario continúa con un único carrito activo
 
-Ver detalles en sección 5 de [`er_model_documentation.md`](documents_external/er_model_documentation.md)
+Los insumos extendidos de modelado y operación se conservan localmente en `documents_external/`.
 
 ## 🛠️ Tecnologías
 
