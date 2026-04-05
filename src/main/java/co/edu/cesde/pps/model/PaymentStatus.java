@@ -1,0 +1,71 @@
+package co.edu.cesde.pps.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.Objects;
+
+/**
+ * Entidad PaymentStatus - Catálogo de estados posibles de un pago.
+ *
+ * Ejemplos: pending, approved, rejected, refunded
+ *
+ * Campos:
+ * - paymentStatusId: Identificador único del estado (PK)
+ * - name: Nombre único del estado (UNIQUE)
+ * - description: Descripción del estado (NULLABLE)
+ *
+ * Tabla BD: payment_statuses
+ *
+ * Relaciones (futuro - etapa09):
+ * - 1:N con Payment (un estado puede aplicar a múltiples pagos)
+ *
+ * Refactorizado con Lombok en Etapa 07.
+ * Anotaciones JPA básicas agregadas en Etapa 08.
+ */
+@Entity
+@Table(name = "payment_statuses")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class PaymentStatus {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "payment_status_id")
+    private Long paymentStatusId;
+
+    @Column(name = "name", nullable = false, unique = true, length = 50)
+    private String name;
+
+    @Column(name = "description", length = 255)
+    private String description;
+
+    // equals y hashCode basados en ID
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PaymentStatus that = (PaymentStatus) o;
+        return Objects.equals(paymentStatusId, that.paymentStatusId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(paymentStatusId);
+    }
+
+    // toString personalizado sin navegación a objetos relacionados
+
+    @Override
+    public String toString() {
+        return "PaymentStatus{" +
+                "paymentStatusId=" + paymentStatusId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
+}
