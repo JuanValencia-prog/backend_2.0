@@ -91,6 +91,24 @@ Se agregan pruebas para cubrir:
 - `400` por validación
 - `401` sin token o con contraseña actual inválida
 
+### 5. Perfil demo reproducible para integración
+Se agrega un perfil `demo` con seed idempotente para entorno local/demo, pensado para cerrar integración con frontend y QA.
+
+Incluye:
+
+- admin estable
+- customer estable
+- categorías y productos consistentes
+- al menos 1 producto inactivo
+- 1 dirección default del customer demo
+- 1 sesión guest con carrito abierto
+- 1 orden persistida identificable por `orderNumber`
+
+Credenciales demo:
+
+- `admin.demo@pps.com` / `Admin12345*`
+- `customer.demo@pps.com` / `Customer12345*`
+
 ---
 
 ## Archivos principales incorporados o modificados
@@ -111,6 +129,11 @@ Se agregan pruebas para cubrir:
 
 ### Testing
 - `src/test/java/co/edu/cesde/pps/Etapa14UserSelfServiceIntegrationTest.java`
+- `src/test/java/co/edu/cesde/pps/DemoProfileSeedIntegrationTest.java`
+
+### Configuración demo
+- `src/main/resources/application-demo.yml`
+- `src/main/java/co/edu/cesde/pps/config/demo/DemoDataSeeder.java`
 
 ### Documentación
 - `BACKEND_ENDPOINTS_REFRENCE.md`
@@ -129,6 +152,7 @@ Se agregan pruebas para cubrir:
 - la contraseña anterior deja de funcionar en login
 - la nueva contraseña funciona en login
 - la documentación pública queda alineada para frontend
+- existe un perfil `demo` reproducible con credenciales conocidas y datos estables
 
 ---
 
@@ -137,6 +161,7 @@ Se agregan pruebas para cubrir:
 ```bash
 mvn -q -DskipTests compile
 mvn -q -Dtest=Etapa14UserSelfServiceIntegrationTest test
+mvn -q -Dtest=DemoProfileSeedIntegrationTest test
 mvn -q test
 ```
 
@@ -144,5 +169,5 @@ mvn -q test
 
 **Fecha:** 5 de abril de 2026  
 **Rama objetivo:** `etapa14`  
-**Estado:** ✅ Implementación de perfil propio y cambio de contraseña
+**Estado:** ✅ Implementación de perfil propio, cambio de contraseña y seed demo reproducible
 

@@ -94,6 +94,23 @@ git checkout main
 mvn clean compile
 ```
 
+### Ejecutar perfil demo reproducible
+```bash
+mvn spring-boot:run -Dspring-boot.run.profiles=demo
+```
+
+### Credenciales demo estables
+- Admin: `admin.demo@pps.com` / `Admin12345*`
+- Customer: `customer.demo@pps.com` / `Customer12345*`
+
+### Datos demo disponibles
+- categorías jerárquicas consistentes para `GET /api/v1/categories/tree`
+- productos activos e inactivos
+- dirección default del customer demo
+- sesión guest demo con token estable `demo-guest-session-token`
+- carrito guest demo abierto
+- orden persistida demo `ORD-DEMO-0001`
+
 ## 📚 Documentación adicional
 
 - **Roadmap Etapa 3:** pendiente de documentar en archivo dedicado
