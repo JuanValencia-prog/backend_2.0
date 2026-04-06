@@ -634,6 +634,137 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
 
 ---
 
+# 8. Admin Users
+
+> En `etapa15`, estos endpoints requieren usuario autenticado con rol `ADMIN`.
+
+## 8.1 Crear usuario
+- **POST** `/api/v1/admin/users`
+- **Auth requerida:** sí
+- **Rol requerido:** `ADMIN`
+- **Body:** JSON
+- **Response:** `201 Created`
+- **Errores relevantes:** `400 Validation Error`, `401 Unauthorized`, `403 Forbidden`, `409 Duplicate Resource`
+
+### Body crear usuario
+```json
+{
+  "email": "new.user@cesde.edu.co",
+  "password": "secret123",
+  "firstName": "Nuevo",
+  "lastName": "Usuario",
+  "phone": "3001234567",
+  "role": "CUSTOMER",
+  "status": "ACTIVE"
+}
+```
+
+### Reglas crear usuario
+- `password` es obligatoria solo en creación
+- `role` acepta `ADMIN` o `CUSTOMER`
+- `status` acepta `ACTIVE` o `INACTIVE`
+- `email` debe ser único
+
+## 8.2 Listar usuarios
+- **GET** `/api/v1/admin/users`
+- **Auth requerida:** sí
+- **Rol requerido:** `ADMIN`
+- **Body:** no
+- **Response:** `200 OK`
+- **Errores relevantes:** `401 Unauthorized`, `403 Forbidden`
+
+### Response listar usuarios
+```json
+[
+  {
+    "id": 1,
+    "email": "admin.demo@pps.com",
+    "firstName": "Admin",
+    "lastName": "Demo",
+    "fullName": "Admin Demo",
+    "role": "ADMIN",
+    "phone": "3000000001",
+    "status": "ACTIVE",
+    "createdAt": "2026-04-05T14:30:00"
+  },
+  {
+    "id": 2,
+    "email": "customer.demo@pps.com",
+    "firstName": "Customer",
+    "lastName": "Demo",
+    "fullName": "Customer Demo",
+    "role": "CUSTOMER",
+    "phone": "3000000002",
+    "status": "INACTIVE",
+    "createdAt": "2026-04-05T14:35:00"
+  }
+]
+```
+
+## 8.3 Obtener usuario por ID
+- **GET** `/api/v1/admin/users/{id}`
+- **Auth requerida:** sí
+- **Rol requerido:** `ADMIN`
+- **Body:** no
+- **Response:** `200 OK`
+- **Errores relevantes:** `401 Unauthorized`, `403 Forbidden`, `404 Resource Not Found`
+
+## 8.4 Actualizar usuario
+- **PUT** `/api/v1/admin/users/{id}`
+- **Auth requerida:** sí
+- **Rol requerido:** `ADMIN`
+- **Body:** JSON
+- **Response:** `200 OK`
+- **Errores relevantes:** `400 Validation Error`, `401 Unauthorized`, `403 Forbidden`, `404 Resource Not Found`, `409 Duplicate Resource`
+
+### Body actualizar usuario
+```json
+{
+  "email": "updated.user@cesde.edu.co",
+  "firstName": "Usuario",
+  "lastName": "Actualizado",
+  "phone": "3017654321",
+  "role": "ADMIN",
+  "status": "ACTIVE"
+}
+```
+
+### Reglas actualizar usuario
+- este CRUD no cambia contraseña
+- `role` acepta `ADMIN` o `CUSTOMER`
+- `status` acepta `ACTIVE` o `INACTIVE`
+- si se cambia `email`, debe seguir siendo único
+
+## 8.5 Eliminar usuario
+- **DELETE** `/api/v1/admin/users/{id}`
+- **Auth requerida:** sí
+- **Rol requerido:** `ADMIN`
+- **Body:** no
+- **Response:** `204 No Content`
+- **Errores relevantes:** `401 Unauthorized`, `403 Forbidden`, `404 Resource Not Found`
+
+### Regla eliminar usuario
+- el delete es **baja lógica**: el usuario no se borra físicamente
+- el backend cambia `status` a `INACTIVE`
+- un usuario `INACTIVE` no puede iniciar sesión
+
+### Shape de usuario admin
+```json
+{
+  "id": 3,
+  "email": "updated.user@cesde.edu.co",
+  "firstName": "Usuario",
+  "lastName": "Actualizado",
+  "fullName": "Usuario Actualizado",
+  "role": "ADMIN",
+  "phone": "3017654321",
+  "status": "ACTIVE",
+  "createdAt": "2026-04-05T15:00:00"
+}
+```
+
+---
+
 ## Flujos principales ya soportados
 
 1. crear sesión guest
@@ -648,6 +779,7 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
 10. consultar detalle de orden
 11. consultar catálogo público
 12. crear/editar/desactivar productos
+13. crear/listar/editar/desactivar usuarios desde admin
 
 ---
 
