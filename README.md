@@ -106,7 +106,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=demo
 
 ### Datos demo disponibles
 - categorías jerárquicas consistentes para `GET /api/v1/categories/tree`
-- productos activos e inactivos
+- productos activos e inactivos con campo `image` y URLs públicas sembradas
 - dirección default del customer demo
 - sesión guest demo con token estable `demo-guest-session-token`
 - carrito guest demo abierto
@@ -120,6 +120,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=demo
 - **Resumen Etapa 13:** [`ETAPA13_SUMMARY.md`](ETAPA13_SUMMARY.md)
 - **Resumen Etapa 14:** [`ETAPA14_SUMMARY.md`](ETAPA14_SUMMARY.md)
 - **Resumen Etapa 15:** [`ETAPA15_SUMMARY.md`](ETAPA15_SUMMARY.md)
+- **Resumen Etapa 16:** [`ETAPA16_SUMMARY.md`](ETAPA16_SUMMARY.md)
 - **Referencia de endpoints backend:** [`BACKEND_ENDPOINTS_REFRENCE.md`](BACKEND_ENDPOINTS_REFRENCE.md)
 - **Notas operativas locales:** `documents_external/` se conserva solo como apoyo local y no se versiona.
 

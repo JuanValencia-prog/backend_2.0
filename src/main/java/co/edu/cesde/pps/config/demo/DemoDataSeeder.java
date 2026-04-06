@@ -103,10 +103,46 @@ public class DemoDataSeeder implements ApplicationRunner {
         Category audio = upsertCategory(electronics, "Audio", "audio");
         Category keyboards = upsertCategory(accessories, "Keyboards", "keyboards");
 
-        Product laptop = upsertProduct(computers, "LAP-001", "Laptop Demo", "Laptop demo estable para integracion", MoneyUtils.of("1299.90"), 12, true);
-        Product headphones = upsertProduct(audio, "HEAD-001", "Audifonos Demo", "Audifonos demo estables para integracion", MoneyUtils.of("249.90"), 25, true);
-        Product keyboard = upsertProduct(keyboards, "KEY-001", "Teclado Demo", "Teclado mecanico demo", MoneyUtils.of("149.90"), 18, true);
-        upsertProduct(accessories, "OLD-001", "Producto Inactivo Demo", "Producto sembrado como inactivo para la UI", MoneyUtils.of("59.90"), 4, false);
+        Product laptop = upsertProduct(
+                computers,
+                "LAP-001",
+                "Laptop Demo",
+                "Laptop demo estable para integracion",
+                "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1200&q=80",
+                MoneyUtils.of("1299.90"),
+                12,
+                true
+        );
+        Product headphones = upsertProduct(
+                audio,
+                "HEAD-001",
+                "Audifonos Demo",
+                "Audifonos demo estables para integracion",
+                "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=80",
+                MoneyUtils.of("249.90"),
+                25,
+                true
+        );
+        Product keyboard = upsertProduct(
+                keyboards,
+                "KEY-001",
+                "Teclado Demo",
+                "Teclado mecanico demo",
+                "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?auto=format&fit=crop&w=1200&q=80",
+                MoneyUtils.of("149.90"),
+                18,
+                true
+        );
+        upsertProduct(
+                accessories,
+                "OLD-001",
+                "Producto Inactivo Demo",
+                "Producto sembrado como inactivo para la UI",
+                "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=1200&q=80",
+                MoneyUtils.of("59.90"),
+                4,
+                false
+        );
 
         Address shippingAddress = upsertAddress(customerUser, AddressType.SHIPPING, "Calle Demo 10 #20-30", null,
                 "Medellin", "Antioquia", "Colombia", "050001", true);
@@ -167,13 +203,14 @@ public class DemoDataSeeder implements ApplicationRunner {
     }
 
     private Product upsertProduct(Category category, String sku, String name, String description,
-                                  BigDecimal price, Integer stockQty, boolean active) {
+                                  String image, BigDecimal price, Integer stockQty, boolean active) {
         Product product = productRepository.findBySkuIgnoreCase(sku)
                 .orElseGet(Product::new);
         product.setCategory(category);
         product.setSku(sku);
         product.setName(name);
         product.setDescription(description);
+        product.setImage(image);
         product.setPrice(price);
         product.setStockQty(stockQty);
         product.setIsActive(active);

@@ -161,7 +161,8 @@ class Etapa13AdminAuthorizationIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(productPayload("ADM-004")))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.sku").value("ADM-004"));
+                .andExpect(jsonPath("$.sku").value("ADM-004"))
+                .andExpect(jsonPath("$.image").value(imageForSku("ADM-004")));
     }
 
     private String createAuthenticatedSession(Role role, String email) {
@@ -186,11 +187,16 @@ class Etapa13AdminAuthorizationIntegrationTest {
                   "sku": "%s",
                   "name": "Producto Admin %s",
                   "description": "Producto protegido para admin",
+                  "image": "%s",
                   "price": 99.90,
                   "stockQty": 10,
                   "isActive": true
                 }
-                """.formatted(categoryId, sku, sku);
+                """.formatted(categoryId, sku, sku, imageForSku(sku));
+    }
+
+    private String imageForSku(String sku) {
+        return "https://example.com/images/" + sku.toLowerCase() + ".jpg";
     }
 
     private String bearer(String token) {
