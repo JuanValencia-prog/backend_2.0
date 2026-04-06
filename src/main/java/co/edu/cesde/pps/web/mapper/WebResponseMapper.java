@@ -126,6 +126,7 @@ public class WebResponseMapper {
                 dto.getSku(),
                 dto.getName(),
                 dto.getDescription(),
+                dto.getImage(),
                 dto.getPrice(),
                 dto.getStockQty(),
                 dto.getIsActive(),
