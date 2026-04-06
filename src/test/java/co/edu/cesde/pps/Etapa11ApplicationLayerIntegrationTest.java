@@ -51,6 +51,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 class Etapa11ApplicationLayerIntegrationTest {
 
+    private static final String MOUSE_IMAGE = "https://example.com/images/mou-001.jpg";
+    private static final String KEYBOARD_IMAGE = "https://example.com/images/key-001.jpg";
+
     @Autowired
     private AuthApplicationService authApplicationService;
 
@@ -132,6 +135,7 @@ class Etapa11ApplicationLayerIntegrationTest {
                 "MOU-001",
                 "Mouse Gamer",
                 "Mouse para pruebas de carrito guest",
+                MOUSE_IMAGE,
                 new BigDecimal("89.90"),
                 20,
                 true
@@ -142,6 +146,7 @@ class Etapa11ApplicationLayerIntegrationTest {
                 "KEY-001",
                 "Teclado Mecanico",
                 "Segundo producto para validar merge",
+                KEYBOARD_IMAGE,
                 new BigDecimal("120.00"),
                 15,
                 true
@@ -149,6 +154,10 @@ class Etapa11ApplicationLayerIntegrationTest {
 
         List<ProductResponse> activeProducts = catalogApplicationService.listProducts(true);
         assertThat(activeProducts).hasSize(2);
+        assertThat(firstProduct.image()).isEqualTo(MOUSE_IMAGE);
+        assertThat(secondProduct.image()).isEqualTo(KEYBOARD_IMAGE);
+        assertThat(activeProducts).extracting(ProductResponse::image)
+                .containsExactlyInAnyOrder(MOUSE_IMAGE, KEYBOARD_IMAGE);
         assertThat(catalogApplicationService.listCategoryTree()).hasSize(1);
 
         AuthSessionResponse guestSession = authApplicationService.createGuestSession();

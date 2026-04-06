@@ -104,8 +104,12 @@ class DemoProfileSeedIntegrationTest {
         assertThat(categoryRepository.findBySlugIgnoreCase("accessories")).isPresent();
         assertThat(categoryRepository.findBySlugIgnoreCase("computers")).isPresent();
 
+        Product laptop = productRepository.findBySkuIgnoreCase("LAP-001").orElseThrow();
+        assertThat(laptop.getImage()).isNotBlank();
+
         Product inactiveProduct = productRepository.findBySkuIgnoreCase("OLD-001").orElseThrow();
         assertThat(inactiveProduct.getIsActive()).isFalse();
+        assertThat(inactiveProduct.getImage()).isNotBlank();
 
         List<Address> addresses = addressRepository.findByUser_UserId(customerUser.getUserId());
         assertThat(addresses).hasSize(2);
@@ -157,6 +161,17 @@ class DemoProfileSeedIntegrationTest {
         assertThat(electronics).isNotNull();
         assertThat(electronics.path("subcategories").isArray()).isTrue();
         assertThat(findNodeBySlug(electronics.path("subcategories"), "computers")).isNotNull();
+
+        Product laptop = productRepository.findBySkuIgnoreCase("LAP-001").orElseThrow();
+
+        mockMvc.perform(get("/api/v1/products"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].image").isString());
+
+        mockMvc.perform(get("/api/v1/products/{id}", laptop.getProductId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.sku").value("LAP-001"))
+                .andExpect(jsonPath("$.image").value(laptop.getImage()));
 
         mockMvc.perform(get("/api/v1/orders/me")
                         .header(HttpHeaders.AUTHORIZATION, bearer(adminToken)))

@@ -201,11 +201,14 @@ class Etapa12HttpIntegrationTest {
         Long childCategoryId = createCategory("Teclados", rootCategoryId);
 
         MvcResult firstProductResult = createProduct(rootCategoryId, "MOU-001", "Mouse Gamer", 20, true);
-        Long firstProductId = readJson(firstProductResult).path("id").asLong();
+        JsonNode firstProductBody = readJson(firstProductResult);
+        Long firstProductId = firstProductBody.path("id").asLong();
+        assertThat(firstProductBody.path("image").asText()).isEqualTo(imageForSku("MOU-001"));
 
         MvcResult secondProductResult = createProduct(childCategoryId, "KEY-001", "Teclado Mecanico", 15, true);
         JsonNode secondProductBody = readJson(secondProductResult);
         Long secondProductId = secondProductBody.path("id").asLong();
+        assertThat(secondProductBody.path("image").asText()).isEqualTo(imageForSku("KEY-001"));
 
         mockMvc.perform(get("/api/v1/categories"))
                 .andExpect(status().isOk())
@@ -225,18 +228,21 @@ class Etapa12HttpIntegrationTest {
 
         mockMvc.perform(get("/api/v1/products"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").exists());
+                .andExpect(jsonPath("$[0].id").exists())
+                .andExpect(jsonPath("$[0].image").isString());
 
         mockMvc.perform(get("/api/v1/products")
                         .param("search", "Mouse")
                         .param("categoryId", String.valueOf(rootCategoryId))
                         .param("activeOnly", "true"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(firstProductId));
+                .andExpect(jsonPath("$[0].id").value(firstProductId))
+                .andExpect(jsonPath("$[0].image").value(imageForSku("MOU-001")));
 
         mockMvc.perform(get("/api/v1/products/{id}", secondProductId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Teclado Mecanico"));
+                .andExpect(jsonPath("$.name").value("Teclado Mecanico"))
+                .andExpect(jsonPath("$.image").value(imageForSku("KEY-001")));
 
         MvcResult guestResult = mockMvc.perform(post("/api/v1/auth/guest-session"))
                 .andExpect(status().isCreated())
@@ -456,12 +462,14 @@ class Etapa12HttpIntegrationTest {
                 .andExpect(jsonPath("$.id").value(orderId))
                 .andExpect(jsonPath("$.shippingAddress.id").value(shippingAddressId));
 
+        String updatedImage = "https://example.com/images/key-001-rgb.jpg";
         MvcResult updatedProductResult = mockMvc.perform(put("/api/v1/admin/products/{id}", secondProductId)
                         .header(HttpHeaders.AUTHORIZATION, bearer(adminToken))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(productPayload(childCategoryId, "KEY-001", "Teclado Mecanico RGB", 10, true)))
+                        .content(productPayload(childCategoryId, "KEY-001", "Teclado Mecanico RGB", updatedImage, 10, true)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Teclado Mecanico RGB"))
+                .andExpect(jsonPath("$.image").value(updatedImage))
                 .andReturn();
 
         Long updatedProductId = readJson(updatedProductResult).path("id").asLong();
@@ -556,23 +564,32 @@ class Etapa12HttpIntegrationTest {
         return mockMvc.perform(post("/api/v1/admin/products")
                         .header(HttpHeaders.AUTHORIZATION, bearer(adminToken))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(productPayload(categoryId, sku, name, stockQty, isActive)))
+                        .content(productPayload(categoryId, sku, name, imageForSku(sku), stockQty, isActive)))
                 .andExpect(status().isCreated())
                 .andReturn();
     }
 
     private String productPayload(Long categoryId, String sku, String name, int stockQty, boolean isActive) {
+        return productPayload(categoryId, sku, name, imageForSku(sku), stockQty, isActive);
+    }
+
+    private String productPayload(Long categoryId, String sku, String name, String image, int stockQty, boolean isActive) {
         return """
                 {
                   "categoryId": %d,
                   "sku": "%s",
                   "name": "%s",
                   "description": "%s descripcion de prueba",
+                  "image": "%s",
                   "price": %s,
                   "stockQty": %d,
                   "isActive": %s
                 }
-                """.formatted(categoryId, sku, name, name, new BigDecimal("89.90"), stockQty, isActive);
+                """.formatted(categoryId, sku, name, name, image, new BigDecimal("89.90"), stockQty, isActive);
+    }
+
+    private String imageForSku(String sku) {
+        return "https://example.com/images/" + sku.toLowerCase() + ".jpg";
     }
 
     private String addressPayload(AddressType type, String line1, boolean isDefault) {
