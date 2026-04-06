@@ -126,7 +126,8 @@ class DemoProfileSeedIntegrationTest {
         mockMvc.perform(get("/api/v1/cart/me")
                         .header(HttpHeaders.AUTHORIZATION, bearer(DemoDataSeeder.GUEST_SESSION_TOKEN)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(1));
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].image").isString());
 
         Order demoOrder = orderRepository.findByOrderNumberIgnoreCase(DemoDataSeeder.DEMO_ORDER_NUMBER).orElseThrow();
         assertThat(demoOrder.getUser().getUserId()).isEqualTo(customerUser.getUserId());
@@ -163,6 +164,11 @@ class DemoProfileSeedIntegrationTest {
         assertThat(findNodeBySlug(electronics.path("subcategories"), "computers")).isNotNull();
 
         Product laptop = productRepository.findBySkuIgnoreCase("LAP-001").orElseThrow();
+
+        mockMvc.perform(get("/api/v1/cart/me")
+                        .header(HttpHeaders.AUTHORIZATION, bearer(DemoDataSeeder.GUEST_SESSION_TOKEN)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items[0].image").isString());
 
         mockMvc.perform(get("/api/v1/products"))
                 .andExpect(status().isOk())

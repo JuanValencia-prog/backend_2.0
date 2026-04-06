@@ -10,6 +10,7 @@ La meta de `etapa16` es cerrar este alcance de punta a punta:
 - requests y responses
 - catálogo público
 - CRUD administrativo de productos
+- carrito y responses auth con carrito
 - respuestas de órdenes y checkout
 - seed demo
 - documentación
@@ -48,7 +49,21 @@ Con esto, el dashboard admin ya puede:
 - editar o reemplazar la imagen principal
 - recuperar el valor persistido luego de crear o actualizar
 
-### 4. Imagen disponible en checkout e historial de órdenes
+### 4. Imagen disponible en carrito y auth
+Las respuestas que exponen `CartResponse` ahora devuelven `image` dentro de cada item del carrito:
+
+- `GET /api/v1/cart/me`
+- `POST /api/v1/cart/items`
+- `PATCH /api/v1/cart/items/{productId}`
+- `DELETE /api/v1/cart/items/{productId}`
+- `POST /api/v1/cart/merge`
+- `POST /api/v1/auth/register`
+- `POST /api/v1/auth/login`
+- `POST /api/v1/auth/guest-session`
+
+Con esto, frontend puede renderizar correctamente carrito, mini-cart y los estados autenticados iniciales sin consultas adicionales al catálogo para resolver imágenes.
+
+### 5. Imagen disponible en checkout e historial de órdenes
 Los endpoints de órdenes ahora devuelven `image` dentro de cada item:
 
 - `POST /api/v1/orders/checkout`
@@ -57,7 +72,7 @@ Los endpoints de órdenes ahora devuelven `image` dentro de cada item:
 
 Con esto, frontend puede renderizar `order-confirmation`, historial y detalle de compra sin consultas adicionales al catálogo para resolver la imagen del producto.
 
-### 5. Mapeo completo entre capas
+### 6. Mapeo completo entre capas
 `image` queda propagado en:
 
 - entidad JPA
@@ -69,16 +84,17 @@ Con esto, frontend puede renderizar `order-confirmation`, historial y detalle de
 
 Esto evita inconsistencias entre persistencia, lógica de negocio y contrato HTTP.
 
-### 6. Seed demo con URLs reales
+### 7. Seed demo con URLs reales
 El perfil `demo` ahora carga productos con imágenes públicas reales para facilitar:
 
 - validación visual desde frontend
 - demos funcionales
 - smoke tests manuales
 - revisión de catálogo sin datos vacíos
+- validación visual del carrito y auth bootstrap
 - validación visual de order-confirmation e historial
 
-### 7. Pruebas de integración ajustadas
+### 8. Pruebas de integración ajustadas
 Se amplían pruebas para cubrir:
 
 - creación de producto con `image`
@@ -86,6 +102,7 @@ Se amplían pruebas para cubrir:
 - actualización admin de `image`
 - presencia de `image` en seed demo
 - exposición de `image` en catálogo demo
+- exposición de `image` en cart y auth responses con carrito
 - exposición de `image` en checkout y consultas de órdenes
 
 ---
@@ -99,8 +116,11 @@ Se amplían pruebas para cubrir:
 
 ### DTOs y mappers
 - `src/main/java/co/edu/cesde/pps/dto/ProductDTO.java`
+- `src/main/java/co/edu/cesde/pps/dto/CartItemDTO.java`
 - `src/main/java/co/edu/cesde/pps/dto/OrderItemDTO.java`
+- `src/main/java/co/edu/cesde/pps/mapper/CartMapper.java`
 - `src/main/java/co/edu/cesde/pps/mapper/OrderMapper.java`
+- `src/main/java/co/edu/cesde/pps/web/dto/response/CartItemResponse.java`
 - `src/main/java/co/edu/cesde/pps/mapper/ProductMapper.java`
 - `src/main/java/co/edu/cesde/pps/web/dto/request/ProductUpsertRequest.java`
 - `src/main/java/co/edu/cesde/pps/web/dto/response/OrderItemResponse.java`
@@ -134,6 +154,8 @@ Se amplían pruebas para cubrir:
 - `GET /api/v1/products/{id}` devuelve `image`
 - `POST /api/v1/admin/products` acepta y devuelve `image`
 - `PUT /api/v1/admin/products/{id}` acepta y devuelve `image`
+- `GET /api/v1/cart/me` devuelve `image` por item
+- las responses auth con `cart` devuelven `image` por item
 - `POST /api/v1/orders/checkout` devuelve `image` por item
 - `GET /api/v1/orders/me` devuelve `image` por item
 - `GET /api/v1/orders/{id}` devuelve `image` por item

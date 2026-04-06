@@ -176,6 +176,7 @@ class Etapa11ApplicationLayerIntegrationTest {
         );
         assertThat(guestCart.summary().itemsCount()).isEqualTo(2);
         assertThat(guestCart.items()).hasSize(1);
+        assertThat(guestCart.items().get(0).image()).isEqualTo(MOUSE_IMAGE);
 
         AuthSessionResponse registeredSession = authApplicationService.register(new RegisterRequest(
                 "ada@cesde.edu.co",
@@ -189,6 +190,7 @@ class Etapa11ApplicationLayerIntegrationTest {
         assertThat(registeredSession.user()).isNotNull();
         assertThat(registeredSession.cart().isGuest()).isFalse();
         assertThat(registeredSession.cart().summary().itemsCount()).isEqualTo(2);
+        assertThat(registeredSession.cart().items().get(0).image()).isEqualTo(MOUSE_IMAGE);
         assertThat(authApplicationService.getCurrentUser(registeredSession.sessionToken()).email())
                 .isEqualTo("ada@cesde.edu.co");
 
@@ -219,6 +221,9 @@ class Etapa11ApplicationLayerIntegrationTest {
         );
         assertThat(mergedCart.items()).hasSize(2);
         assertThat(mergedCart.summary().itemsCount()).isEqualTo(3);
+        assertThat(mergedCart.items())
+                .extracting(item -> item.image())
+                .containsExactlyInAnyOrder(MOUSE_IMAGE, KEYBOARD_IMAGE);
 
         OrderResponse order = orderApplicationService.checkout(
                 registeredSession.sessionToken(),

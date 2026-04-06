@@ -162,6 +162,7 @@ class Etapa12HttpIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.user.email").value("ada@cesde.edu.co"))
                 .andExpect(jsonPath("$.cart.isGuest").value(false))
+                .andExpect(jsonPath("$.cart.items.length()").value(0))
                 .andReturn();
 
         JsonNode registerBody = objectMapper.readTree(registerResult.getResponse().getContentAsString());
@@ -268,7 +269,8 @@ class Etapa12HttpIntegrationTest {
                                 }
                                 """.formatted(firstProductId)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.summary.itemsCount").value(1));
+                .andExpect(jsonPath("$.summary.itemsCount").value(1))
+                .andExpect(jsonPath("$.items[0].image").value(imageForSku("MOU-001")));
 
         MvcResult updatedGuestCartResult = mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch("/api/v1/cart/items/{productId}", firstProductId)
                         .header(HttpHeaders.AUTHORIZATION, bearer(guestToken))
@@ -280,6 +282,7 @@ class Etapa12HttpIntegrationTest {
                                 """))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.summary.itemsCount").value(2))
+                .andExpect(jsonPath("$.items[0].image").value(imageForSku("MOU-001")))
                 .andReturn();
 
         Long updatedGuestCartId = readJson(updatedGuestCartResult).path("id").asLong();
@@ -299,6 +302,7 @@ class Etapa12HttpIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.cart.isGuest").value(false))
                 .andExpect(jsonPath("$.cart.summary.itemsCount").value(2))
+                .andExpect(jsonPath("$.cart.items[0].image").value(imageForSku("MOU-001")))
                 .andReturn();
 
         JsonNode registerBody = readJson(registerResult);
@@ -378,7 +382,8 @@ class Etapa12HttpIntegrationTest {
                                 }
                                 """.formatted(secondProductId)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.summary.itemsCount").value(1));
+                .andExpect(jsonPath("$.summary.itemsCount").value(1))
+                .andExpect(jsonPath("$.items[0].image").value(imageForSku("KEY-001")));
 
         mockMvc.perform(post("/api/v1/cart/merge")
                         .header(HttpHeaders.AUTHORIZATION, bearer(authenticatedToken))
@@ -390,12 +395,15 @@ class Etapa12HttpIntegrationTest {
                                 """.formatted(secondGuestCartId)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items.length()").value(2))
-                .andExpect(jsonPath("$.summary.itemsCount").value(3));
+                .andExpect(jsonPath("$.summary.itemsCount").value(3))
+                .andExpect(jsonPath("$.items[0].image").isString())
+                .andExpect(jsonPath("$.items[1].image").isString());
 
         mockMvc.perform(delete("/api/v1/cart/items/{productId}", secondProductId)
                         .header(HttpHeaders.AUTHORIZATION, bearer(authenticatedToken)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(1));
+                .andExpect(jsonPath("$.items.length()").value(1))
+                .andExpect(jsonPath("$.items[0].image").isString());
 
         mockMvc.perform(post("/api/v1/cart/items")
                         .header(HttpHeaders.AUTHORIZATION, bearer(authenticatedToken))
@@ -407,7 +415,9 @@ class Etapa12HttpIntegrationTest {
                                 }
                                 """.formatted(secondProductId)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items.length()").value(2));
+                .andExpect(jsonPath("$.items.length()").value(2))
+                .andExpect(jsonPath("$.items[0].image").isString())
+                .andExpect(jsonPath("$.items[1].image").isString());
 
         MvcResult disposableGuestResult = mockMvc.perform(post("/api/v1/auth/guest-session"))
                 .andExpect(status().isCreated())
