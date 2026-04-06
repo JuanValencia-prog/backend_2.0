@@ -305,6 +305,7 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
 - si `search` viene informado, se filtra por nombre
 - si `categoryId` viene informado, se filtra por categoría
 - `activeOnly=true` excluye productos inactivos
+- `image` representa la URL pública de la imagen principal del producto y puede venir en `null` si el producto no la tiene cargada
 
 ## 3.2 Obtener producto por ID
 - **GET** `/api/v1/products/{id}`
@@ -321,6 +322,7 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
   "sku": "MOU-001",
   "name": "Mouse Gamer",
   "description": "Mouse Gamer descripcion de prueba",
+  "image": "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?auto=format&fit=crop&w=1200&q=80",
   "price": 89.90,
   "stockQty": 20,
   "isActive": true,
@@ -626,11 +628,16 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
   "sku": "MOU-001",
   "name": "Mouse Gamer",
   "description": "Mouse Gamer descripcion de prueba",
+  "image": "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?auto=format&fit=crop&w=1200&q=80",
   "price": 89.90,
   "stockQty": 20,
   "isActive": true
 }
 ```
+
+### Reglas crear/actualizar producto
+- `image` es opcional
+- cuando se informa `image`, el backend la persiste y la devuelve en `POST`, `PUT`, `GET /api/v1/products` y `GET /api/v1/products/{id}`
 
 ---
 
