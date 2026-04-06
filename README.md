@@ -107,6 +107,7 @@ mvn spring-boot:run -Dspring-boot.run.profiles=demo
 ### Datos demo disponibles
 - categorías jerárquicas consistentes para `GET /api/v1/categories/tree`
 - productos activos e inactivos con campo `image` y URLs públicas sembradas
+- checkout e historial de órdenes con `image` por item para `order-confirmation`
 - dirección default del customer demo
 - sesión guest demo con token estable `demo-guest-session-token`
 - carrito guest demo abierto

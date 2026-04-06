@@ -181,7 +181,8 @@ class DemoProfileSeedIntegrationTest {
         mockMvc.perform(get("/api/v1/orders/me")
                         .header(HttpHeaders.AUTHORIZATION, bearer(customerToken)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].orderNumber").value(DemoDataSeeder.DEMO_ORDER_NUMBER));
+                .andExpect(jsonPath("$[0].orderNumber").value(DemoDataSeeder.DEMO_ORDER_NUMBER))
+                .andExpect(jsonPath("$[0].items[0].image").isString());
 
         User customerUser = userRepository.findByEmailIgnoreCase(DemoDataSeeder.CUSTOMER_EMAIL).orElseThrow();
         Address billingAddress = addressRepository.findByUser_UserId(customerUser.getUserId()).stream()

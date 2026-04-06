@@ -228,6 +228,7 @@ public class WebResponseMapper {
                 dto.getProductId(),
                 dto.getProductSku(),
                 dto.getProductName(),
+                dto.getProductImageUrl(),
                 dto.getQuantity(),
                 dto.getUnitPrice(),
                 dto.getLineTotal()
