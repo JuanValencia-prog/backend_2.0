@@ -228,6 +228,9 @@ class Etapa11ApplicationLayerIntegrationTest {
         assertThat(order.id()).isNotNull();
         assertThat(order.orderNumber()).startsWith("ORD-");
         assertThat(order.items()).hasSize(2);
+        assertThat(order.items())
+                .extracting(item -> item.image())
+                .containsExactlyInAnyOrder(MOUSE_IMAGE, KEYBOARD_IMAGE);
         assertThat(order.shippingAddress()).isNotNull();
         assertThat(order.billingAddress()).isNotNull();
         assertThat(orderApplicationService.listMyOrders(registeredSession.sessionToken())).hasSize(1);

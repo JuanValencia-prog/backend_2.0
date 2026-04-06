@@ -447,6 +447,8 @@ class Etapa12HttpIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.status").value("PENDING"))
                 .andExpect(jsonPath("$.items.length()").value(2))
+                .andExpect(jsonPath("$.items[0].image").isString())
+                .andExpect(jsonPath("$.items[1].image").isString())
                 .andReturn();
 
         Long orderId = readJson(checkoutResult).path("id").asLong();
@@ -454,13 +456,15 @@ class Etapa12HttpIntegrationTest {
         mockMvc.perform(get("/api/v1/orders/me")
                         .header(HttpHeaders.AUTHORIZATION, bearer(authenticatedToken)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(orderId));
+                .andExpect(jsonPath("$[0].id").value(orderId))
+                .andExpect(jsonPath("$[0].items[0].image").isString());
 
         mockMvc.perform(get("/api/v1/orders/{id}", orderId)
                         .header(HttpHeaders.AUTHORIZATION, bearer(authenticatedToken)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(orderId))
-                .andExpect(jsonPath("$.shippingAddress.id").value(shippingAddressId));
+                .andExpect(jsonPath("$.shippingAddress.id").value(shippingAddressId))
+                .andExpect(jsonPath("$.items[0].image").isString());
 
         String updatedImage = "https://example.com/images/key-001-rgb.jpg";
         MvcResult updatedProductResult = mockMvc.perform(put("/api/v1/admin/products/{id}", secondProductId)
