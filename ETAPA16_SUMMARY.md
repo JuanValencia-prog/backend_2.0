@@ -10,6 +10,7 @@ La meta de `etapa16` es cerrar este alcance de punta a punta:
 - requests y responses
 - catálogo público
 - CRUD administrativo de productos
+- respuestas de órdenes y checkout
 - seed demo
 - documentación
 - pruebas
@@ -47,7 +48,16 @@ Con esto, el dashboard admin ya puede:
 - editar o reemplazar la imagen principal
 - recuperar el valor persistido luego de crear o actualizar
 
-### 4. Mapeo completo entre capas
+### 4. Imagen disponible en checkout e historial de órdenes
+Los endpoints de órdenes ahora devuelven `image` dentro de cada item:
+
+- `POST /api/v1/orders/checkout`
+- `GET /api/v1/orders/me`
+- `GET /api/v1/orders/{id}`
+
+Con esto, frontend puede renderizar `order-confirmation`, historial y detalle de compra sin consultas adicionales al catálogo para resolver la imagen del producto.
+
+### 5. Mapeo completo entre capas
 `image` queda propagado en:
 
 - entidad JPA
@@ -59,15 +69,16 @@ Con esto, el dashboard admin ya puede:
 
 Esto evita inconsistencias entre persistencia, lógica de negocio y contrato HTTP.
 
-### 5. Seed demo con URLs reales
+### 6. Seed demo con URLs reales
 El perfil `demo` ahora carga productos con imágenes públicas reales para facilitar:
 
 - validación visual desde frontend
 - demos funcionales
 - smoke tests manuales
 - revisión de catálogo sin datos vacíos
+- validación visual de order-confirmation e historial
 
-### 6. Pruebas de integración ajustadas
+### 7. Pruebas de integración ajustadas
 Se amplían pruebas para cubrir:
 
 - creación de producto con `image`
@@ -75,6 +86,7 @@ Se amplían pruebas para cubrir:
 - actualización admin de `image`
 - presencia de `image` en seed demo
 - exposición de `image` en catálogo demo
+- exposición de `image` en checkout y consultas de órdenes
 
 ---
 
@@ -87,8 +99,11 @@ Se amplían pruebas para cubrir:
 
 ### DTOs y mappers
 - `src/main/java/co/edu/cesde/pps/dto/ProductDTO.java`
+- `src/main/java/co/edu/cesde/pps/dto/OrderItemDTO.java`
+- `src/main/java/co/edu/cesde/pps/mapper/OrderMapper.java`
 - `src/main/java/co/edu/cesde/pps/mapper/ProductMapper.java`
 - `src/main/java/co/edu/cesde/pps/web/dto/request/ProductUpsertRequest.java`
+- `src/main/java/co/edu/cesde/pps/web/dto/response/OrderItemResponse.java`
 - `src/main/java/co/edu/cesde/pps/web/dto/response/ProductResponse.java`
 - `src/main/java/co/edu/cesde/pps/web/mapper/WebRequestMapper.java`
 - `src/main/java/co/edu/cesde/pps/web/mapper/WebResponseMapper.java`
@@ -119,6 +134,9 @@ Se amplían pruebas para cubrir:
 - `GET /api/v1/products/{id}` devuelve `image`
 - `POST /api/v1/admin/products` acepta y devuelve `image`
 - `PUT /api/v1/admin/products/{id}` acepta y devuelve `image`
+- `POST /api/v1/orders/checkout` devuelve `image` por item
+- `GET /api/v1/orders/me` devuelve `image` por item
+- `GET /api/v1/orders/{id}` devuelve `image` por item
 - el perfil `demo` siembra productos con imágenes
 - frontend tiene contrato oficial actualizado
 - existe documentación nueva propia de etapa16

@@ -528,6 +528,10 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
 - **Auth requerida:** sí
 - **Response:** `200 OK`
 
+### Regla de items de orden
+- cada item expone `image` con la imagen principal actual del producto relacionado
+- `image` puede venir en `null` si el producto no tiene imagen cargada
+
 ### Body checkout
 ```json
 {
@@ -575,7 +579,8 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
       "id": 1,
       "productId": 101,
       "sku": "MOU-001",
-      "name": "Mouse Gamer",
+      "productName": "Mouse Gamer",
+      "image": "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?auto=format&fit=crop&w=1200&q=80",
       "quantity": 2,
       "unitPrice": 89.90,
       "lineTotal": 179.80
