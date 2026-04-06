@@ -61,6 +61,7 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
 - `expiresAt`
 - `user = null`
 - `cart` guest inicial
+- el objeto `cart` sigue el mismo contrato de la sección `# 5. Cart`, incluyendo `items[*].image`
 
 ---
 
@@ -76,6 +77,7 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
 - `expiresAt`
 - `user`
 - `cart`
+- el objeto `cart` sigue el mismo contrato de la sección `# 5. Cart`, incluyendo `items[*].image`
 
 ### Body
 ```json
@@ -107,6 +109,7 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
 - `expiresAt`
 - `user`
 - `cart`
+- el objeto `cart` sigue el mismo contrato de la sección `# 5. Cart`, incluyendo `items[*].image`
 
 ### Body
 ```json
@@ -470,6 +473,9 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
 - si el merge supera el stock disponible: `409 INSUFFICIENT_STOCK`
 
 ### Shape de carrito
+- cada item expone `image` con la imagen principal actual del producto relacionado
+- `image` puede venir en `null` si el producto no tiene imagen cargada
+
 ```json
 {
   "id": 22,
@@ -485,6 +491,7 @@ Está pensado para el equipo de frontend y QA como referencia rápida del backen
       "productId": 101,
       "sku": "MOU-001",
       "name": "Mouse Gamer",
+      "image": "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?auto=format&fit=crop&w=1200&q=80",
       "quantity": 2,
       "unitPrice": 89.90,
       "lineTotal": 179.80,
