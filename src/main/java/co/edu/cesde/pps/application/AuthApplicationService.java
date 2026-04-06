@@ -3,6 +3,7 @@ package co.edu.cesde.pps.application;
 import co.edu.cesde.pps.config.AppConfig;
 import co.edu.cesde.pps.dto.CartDTO;
 import co.edu.cesde.pps.dto.UserDTO;
+import co.edu.cesde.pps.enums.UserStatus;
 import co.edu.cesde.pps.exception.AuthenticationException;
 import co.edu.cesde.pps.model.User;
 import co.edu.cesde.pps.model.UserSession;
@@ -78,6 +79,9 @@ public class AuthApplicationService {
         validateLoginRequest(request);
 
         User user = userService.findUserEntityByEmailOrThrow(request.email());
+        if (user.getStatus() != UserStatus.ACTIVE) {
+            throw new AuthenticationException("User account is inactive");
+        }
         if (!passwordHasher.matches(request.password(), user.getPasswordHash())) {
             throw new AuthenticationException("Invalid credentials");
         }
