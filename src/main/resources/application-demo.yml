@@ -1,0 +1,9 @@
+spring:
+  config:
+    activate:
+      on-profile: demo
+
+logging:
+  level:
+    co.edu.cesde.pps.config.demo: INFO
+
