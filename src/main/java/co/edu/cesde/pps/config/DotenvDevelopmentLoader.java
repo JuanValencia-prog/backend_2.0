@@ -38,7 +38,11 @@ public final class DotenvDevelopmentLoader {
 
     public static void load() {
         try {
+            String workingDir = System.getProperty("user.dir");
+            log.info("Buscando .env en directorio: {}", workingDir);
+
             Dotenv dotenv = Dotenv.configure()
+                .directory(workingDir)
                 .filename(".env")
                 .ignoreIfMissing()
                 .ignoreIfMalformed()
@@ -50,9 +54,9 @@ public final class DotenvDevelopmentLoader {
             }
 
             if (loadedProperties > 0) {
-                log.info("Se cargaron {} propiedades desde .env para desarrollo local", loadedProperties);
+                log.info("Se cargaron {} propiedades desde .env en: {}", loadedProperties, workingDir);
             } else {
-                log.debug("No fue necesario aplicar propiedades desde .env");
+                log.warn("No se cargaron propiedades desde .env — verifica que el archivo exista en: {}", workingDir);
             }
         } catch (Exception exception) {
             log.warn("No se pudo cargar el archivo .env. La aplicación continuará con la configuración disponible: {}",

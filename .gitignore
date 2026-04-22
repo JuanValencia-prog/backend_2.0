@@ -38,6 +38,7 @@ build/
 .env
 *.env
 !.env.example
+!.env.example.docker
 *.log
 
 ### Legacy JPA manual configuration ###
@@ -48,3 +49,7 @@ SECURITY.md
 
 ### Documentation (external reference) ###
 documents_external/
+docs/
+
+# SonarQube
+.sonar*.*
