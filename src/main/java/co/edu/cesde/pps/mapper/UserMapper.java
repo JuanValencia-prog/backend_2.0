@@ -2,6 +2,10 @@ package co.edu.cesde.pps.mapper;
 
 import co.edu.cesde.pps.dto.UserDTO;
 import co.edu.cesde.pps.model.User;
+
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +20,7 @@ import java.util.stream.Collectors;
  * - Calcular campos agregados (addressesCount)
  * - NO exponer datos sensibles (passwordHash)
  */
+@Component
 public class UserMapper {
 
     /**
@@ -45,10 +50,12 @@ public class UserMapper {
         dto.setStatus(user.getStatus());
         dto.setCreatedAt(user.getCreatedAt());
 
-        // Campos calculados
-        dto.setFullName(user.getFullName()); // Método helper de User
+        // Evitar NullPointerException en fullName
+        String firstName = user.getFirstName() != null ? user.getFirstName() : "";
+        String lastName = user.getLastName() != null ? user.getLastName() : "";
+        dto.setFullName((firstName + " " + lastName).trim());
 
-        // Campos agregados (null safety)
+        // Evitar problemas con listas null (y posibles lazy issues básicos)
         if (user.getAddresses() != null) {
             dto.setAddressesCount(user.getAddresses().size());
         } else {
@@ -61,7 +68,9 @@ public class UserMapper {
     /**
      * Convierte UserDTO a User Entity.
      *
-     * NOTA: No convierte Role ni Addresses, eso se maneja en el servicio.
+     * NOTA:
+     * - NO convierte Role ni Addresses (se maneja en el service)
+     * - createdAt normalmente lo gestiona la base de datos
      *
      * @param dto DTO a convertir
      * @return User Entity o null si dto es null
@@ -73,13 +82,16 @@ public class UserMapper {
 
         User user = new User();
         user.setUserId(dto.getUserId());
-        // Role se debe asignar en el servicio
+
+        // Role se asigna en el servicio
         user.setEmail(dto.getEmail());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setPhone(dto.getPhone());
         user.setStatus(dto.getStatus());
-        user.setCreatedAt(dto.getCreatedAt());
+
+        // ❌ NO setear createdAt desde el cliente (buena práctica)
+        // user.setCreatedAt(dto.getCreatedAt());
 
         return user;
     }
@@ -92,7 +104,7 @@ public class UserMapper {
      */
     public List<UserDTO> toDTOList(List<User> users) {
         if (users == null) {
-            return List.of();
+            return new ArrayList<>();
         }
 
         return users.stream()
@@ -108,7 +120,7 @@ public class UserMapper {
      */
     public List<User> toEntityList(List<UserDTO> dtos) {
         if (dtos == null) {
-            return List.of();
+            return new ArrayList<>();
         }
 
         return dtos.stream()

@@ -5,27 +5,21 @@ import co.edu.cesde.pps.dto.CartItemDTO;
 import co.edu.cesde.pps.model.Cart;
 import co.edu.cesde.pps.model.CartItem;
 import co.edu.cesde.pps.util.MoneyUtils;
+
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Mapper para conversión entre Cart/CartItem (Entities) y CartDTO/CartItemDTO.
- *
- * Responsabilidades:
- * - Convertir Entity a DTO (toDTO)
- * - Convertir DTO a Entity (toEntity)
- * - Manejar null safety
- * - Convertir items anidados
- * - Calcular totales
- * - Formatear valores monetarios
  */
+@Component
 public class CartMapper {
 
     /**
      * Convierte Cart Entity a CartDTO.
-     *
-     * @param cart Entity a convertir
-     * @return CartDTO o null si cart es null
      */
     public CartDTO toDTO(Cart cart) {
         if (cart == null) {
@@ -35,30 +29,41 @@ public class CartMapper {
         CartDTO dto = new CartDTO();
         dto.setCartId(cart.getCartId());
 
-        // Extraer datos de User (relación)
+        // Relación User (null-safe)
         if (cart.getUser() != null) {
             dto.setUserId(cart.getUser().getUserId());
             dto.setUserEmail(cart.getUser().getEmail());
         }
 
         dto.setStatus(cart.getStatus());
-        dto.setIsGuest(cart.isGuestCart()); // Método helper de Cart
+
+        // Evitar NPE en helper
+        dto.setIsGuest(cart.isGuestCart());
+
         dto.setCreatedAt(cart.getCreatedAt());
         dto.setUpdatedAt(cart.getUpdatedAt());
 
-        // Convertir items
+        // Items (null-safe + lista mutable)
         if (cart.getItems() != null) {
             List<CartItemDTO> itemDTOs = cart.getItems().stream()
                     .map(this::toCartItemDTO)
                     .collect(Collectors.toList());
+
             dto.setItems(itemDTOs);
             dto.setItemsCount(itemDTOs.size());
         } else {
+            dto.setItems(new ArrayList<>());
             dto.setItemsCount(0);
         }
 
-        // Calcular y formatear total
-        dto.setTotal(cart.calculateTotal()); // Método helper de Cart
+        // Total (protegido contra nulls)
+        if (cart.getItems() != null && !cart.getItems().isEmpty()) {
+            dto.setTotal(cart.calculateTotal());
+        } else {
+            dto.setTotal(null);
+        }
+
+        // Formateo seguro
         if (dto.getTotal() != null) {
             dto.setTotalFormatted(MoneyUtils.formatUSD(dto.getTotal()));
         }
@@ -68,9 +73,6 @@ public class CartMapper {
 
     /**
      * Convierte CartItem Entity a CartItemDTO.
-     *
-     * @param item Entity a convertir
-     * @return CartItemDTO o null si item es null
      */
     public CartItemDTO toCartItemDTO(CartItem item) {
         if (item == null) {
@@ -84,25 +86,31 @@ public class CartMapper {
             dto.setCartId(item.getCart().getCartId());
         }
 
-        // Extraer datos de Product (relación)
+        // Relación Product (null-safe)
         if (item.getProduct() != null) {
             dto.setProductId(item.getProduct().getProductId());
             dto.setProductName(item.getProduct().getName());
             dto.setProductSku(item.getProduct().getSku());
-            dto.setProductImageUrl(normalizeImage(item.getProduct().getImage()));
             dto.setProductAvailable(item.getProduct().isAvailable());
             dto.setProductStock(item.getProduct().getStockQty());
         }
 
         dto.setQuantity(item.getQuantity());
         dto.setUnitPrice(item.getUnitPrice());
-        dto.setSubtotal(item.calculateSubtotal()); // Método helper de CartItem
         dto.setAddedAt(item.getAddedAt());
 
-        // Formatear valores
+        // Subtotal protegido
+        if (item.getQuantity() != null && item.getUnitPrice() != null) {
+            dto.setSubtotal(item.calculateSubtotal());
+        } else {
+            dto.setSubtotal(null);
+        }
+
+        // Formateo seguro
         if (dto.getUnitPrice() != null) {
             dto.setUnitPriceFormatted(MoneyUtils.formatUSD(dto.getUnitPrice()));
         }
+
         if (dto.getSubtotal() != null) {
             dto.setSubtotalFormatted(MoneyUtils.formatUSD(dto.getSubtotal()));
         }
@@ -110,21 +118,8 @@ public class CartMapper {
         return dto;
     }
 
-    private String normalizeImage(String image) {
-        if (image == null || image.isBlank()) {
-            return null;
-        }
-
-        return image.trim();
-    }
-
     /**
      * Convierte CartDTO a Cart Entity.
-     *
-     * NOTA: No convierte User ni items completamente, eso se maneja en el servicio.
-     *
-     * @param dto DTO a convertir
-     * @return Cart Entity o null si dto es null
      */
     public Cart toEntity(CartDTO dto) {
         if (dto == null) {
@@ -133,21 +128,19 @@ public class CartMapper {
 
         Cart cart = new Cart();
         cart.setCartId(dto.getCartId());
-        // User se debe asignar en el servicio
+
+        // User se asigna en el service
         cart.setStatus(dto.getStatus());
-        cart.setCreatedAt(dto.getCreatedAt());
-        cart.setUpdatedAt(dto.getUpdatedAt());
+
+        // ❌ Evitar sobrescribir fechas del sistema
+        // cart.setCreatedAt(dto.getCreatedAt());
+        // cart.setUpdatedAt(dto.getUpdatedAt());
 
         return cart;
     }
 
     /**
      * Convierte CartItemDTO a CartItem Entity.
-     *
-     * NOTA: No convierte Cart ni Product, eso se maneja en el servicio.
-     *
-     * @param dto DTO a convertir
-     * @return CartItem Entity o null si dto es null
      */
     public CartItem toCartItemEntity(CartItemDTO dto) {
         if (dto == null) {
@@ -156,7 +149,8 @@ public class CartMapper {
 
         CartItem item = new CartItem();
         item.setCartItemId(dto.getCartItemId());
-        // Cart y Product se deben asignar en el servicio
+
+        // Cart y Product se asignan en el service
         item.setQuantity(dto.getQuantity());
         item.setUnitPrice(dto.getUnitPrice());
         item.setAddedAt(dto.getAddedAt());
@@ -165,18 +159,28 @@ public class CartMapper {
     }
 
     /**
-     * Convierte lista de Cart Entities a lista de CartDTOs.
-     *
-     * @param carts Lista de entities
-     * @return Lista de DTOs o lista vacía si carts es null
+     * Lista Cart → DTO
      */
     public List<CartDTO> toDTOList(List<Cart> carts) {
         if (carts == null) {
-            return List.of();
+            return new ArrayList<>();
         }
 
         return carts.stream()
                 .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Lista DTO → Cart
+     */
+    public List<Cart> toEntityList(List<CartDTO> dtos) {
+        if (dtos == null) {
+            return new ArrayList<>();
+        }
+
+        return dtos.stream()
+                .map(this::toEntity)
                 .collect(Collectors.toList());
     }
 }

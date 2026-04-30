@@ -139,8 +139,8 @@ public class Cart {
      */
     public BigDecimal calculateTotal() {
         List<BigDecimal> subtotals = items.stream()
-            .map(CartItem::calculateSubtotal)
-            .collect(Collectors.toList());
+                .map(CartItem::calculateSubtotal)
+                .collect(Collectors.toList());
         return CalculationUtils.calculateCartTotal(subtotals);
     }
 
@@ -159,19 +159,4 @@ public class Cart {
         return Objects.hash(cartId);
     }
 
-    // toString personalizado sin navegación a objetos relacionados (solo IDs y tamaño de colección)
-
-    @Override
-    public String toString() {
-        return "Cart{" +
-                "cartId=" + cartId +
-                ", userId=" + (user != null ? user.getUserId() : null) +
-                ", sessionId=" + (session != null ? session.getSessionId() : null) +
-                ", status=" + status +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", itemsCount=" + (items != null ? items.size() : 0) +
-                ", total=" + calculateTotal() +
-                '}';
-    }
 }

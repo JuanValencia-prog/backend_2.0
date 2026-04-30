@@ -42,7 +42,6 @@ public class ProductMapper {
         dto.setSku(product.getSku());
         dto.setName(product.getName());
         dto.setDescription(product.getDescription());
-        dto.setImage(product.getImage());
         dto.setPrice(product.getPrice());
         dto.setStockQty(product.getStockQty());
         dto.setIsActive(product.getIsActive());
@@ -78,7 +77,6 @@ public class ProductMapper {
         product.setSku(dto.getSku());
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
-        product.setImage(dto.getImage());
         product.setPrice(dto.getPrice());
         product.setStockQty(dto.getStockQty());
         product.setIsActive(dto.getIsActive());

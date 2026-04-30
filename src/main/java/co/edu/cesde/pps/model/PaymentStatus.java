@@ -58,14 +58,4 @@ public class PaymentStatus {
         return Objects.hash(paymentStatusId);
     }
 
-    // toString personalizado sin navegación a objetos relacionados
-
-    @Override
-    public String toString() {
-        return "PaymentStatus{" +
-                "paymentStatusId=" + paymentStatusId +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
 }

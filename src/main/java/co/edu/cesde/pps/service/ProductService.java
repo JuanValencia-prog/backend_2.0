@@ -175,7 +175,7 @@ public class ProductService {
      *
      * @return Lista de ProductDTO
      */
-    public List<ProductDTO> findAllProducts() {
+    public static List<ProductDTO> findAllProducts() {
         return productMapper.toDTOList(productRepository.findAll());
     }
 

@@ -116,21 +116,5 @@ public class Payment {
         return Objects.hash(paymentId);
     }
 
-    // toString personalizado sin navegación a objetos relacionados (solo IDs)
 
-    @Override
-    public String toString() {
-        return "Payment{" +
-                "paymentId=" + paymentId +
-                ", orderId=" + (order != null ? order.getOrderId() : null) +
-                ", paymentMethodId=" + (paymentMethod != null ? paymentMethod.getPaymentMethodId() : null) +
-                ", paymentStatusId=" + (paymentStatus != null ? paymentStatus.getPaymentStatusId() : null) +
-                ", amount=" + amount +
-                ", currency=" + currency +
-                ", providerReference='" + providerReference + '\'' +
-                ", paidAt=" + paidAt +
-                ", isPaid=" + isPaid() +
-                ", isRefund=" + isRefund() +
-                '}';
-    }
 }

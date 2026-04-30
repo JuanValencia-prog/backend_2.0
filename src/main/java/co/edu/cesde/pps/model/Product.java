@@ -114,21 +114,4 @@ public class Product {
         return Objects.hash(productId);
     }
 
-    // toString personalizado sin navegación a objetos relacionados (solo IDs)
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "productId=" + productId +
-                ", categoryId=" + (category != null ? category.getCategoryId() : null) +
-                ", sku='" + sku + '\'' +
-                ", name='" + name + '\'' +
-                ", image='" + image + '\'' +
-                ", price=" + price +
-                ", stockQty=" + stockQty +
-                ", isActive=" + isActive +
-                ", isAvailable=" + isAvailable() +
-                ", createdAt=" + createdAt +
-                '}';
-    }
 }

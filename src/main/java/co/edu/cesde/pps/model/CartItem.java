@@ -109,18 +109,5 @@ public class CartItem {
         return Objects.hash(cartItemId);
     }
 
-    // toString sin navegación a objetos relacionados (solo IDs)
-
-    @Override
-    public String toString() {
-        return "CartItem{" +
-                "cartItemId=" + cartItemId +
-                ", cartId=" + (cart != null ? cart.getCartId() : null) +
-                ", productId=" + (product != null ? product.getProductId() : null) +
-                ", quantity=" + quantity +
-                ", unitPrice=" + unitPrice +
-                ", subtotal=" + calculateSubtotal() +
-                ", addedAt=" + addedAt +
-                '}';
-    }
 }
+

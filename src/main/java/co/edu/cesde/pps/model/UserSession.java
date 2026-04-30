@@ -84,18 +84,4 @@ public class UserSession {
         return Objects.hash(sessionId);
     }
 
-    // toString personalizado sin navegación a objetos relacionados (solo IDs)
-
-    @Override
-    public String toString() {
-        return "UserSession{" +
-                "sessionId=" + sessionId +
-                ", userId=" + (user != null ? user.getUserId() : null) +
-                ", sessionToken='" + sessionToken + '\'' +
-                ", createdAt=" + createdAt +
-                ", expiresAt=" + expiresAt +
-                ", isGuest=" + isGuestSession() +
-                ", isExpired=" + isExpired() +
-                '}';
-    }
 }

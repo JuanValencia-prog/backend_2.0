@@ -91,17 +91,6 @@ public class User {
     private List<Address> addresses = new ArrayList<>();
 
     // Métodos helper de consulta (sin efectos secundarios)
-
-    /**
-     * Obtiene la dirección por defecto del usuario
-     */
-    public Address getDefaultAddress() {
-        return addresses.stream()
-                .filter(Address::getIsDefault)
-                .findFirst()
-                .orElse(null);
-    }
-
     /**
      * Obtiene el nombre completo del usuario
      */
@@ -124,20 +113,8 @@ public class User {
         return Objects.hash(userId);
     }
 
-    // toString personalizado sin navegación a objetos relacionados (solo IDs y tamaño de colecciones)
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", role=" + (role != null ? role.getName() : "null") +
-                ", email='" + email + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", phone='" + phone + '\'' +
-                ", status=" + status +
-                ", createdAt=" + createdAt +
-                ", addressesCount=" + (addresses != null ? addresses.size() : 0) +
-                '}';
+    public Long getUserId() {
+        return userId;
     }
 }

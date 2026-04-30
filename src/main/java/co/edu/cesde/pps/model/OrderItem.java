@@ -121,17 +121,4 @@ public class OrderItem {
         return Objects.hash(orderItemId);
     }
 
-    // toString personalizado sin navegación a objetos relacionados (solo IDs)
-
-    @Override
-    public String toString() {
-        return "OrderItem{" +
-                "orderItemId=" + orderItemId +
-                ", orderId=" + (order != null ? order.getOrderId() : null) +
-                ", productId=" + (product != null ? product.getProductId() : null) +
-                ", quantity=" + quantity +
-                ", unitPrice=" + unitPrice +
-                ", lineTotal=" + lineTotal +
-                '}';
-    }
 }

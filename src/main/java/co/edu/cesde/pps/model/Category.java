@@ -1,5 +1,6 @@
 package co.edu.cesde.pps.model;
 
+import co.edu.cesde.pps.dto.CategoryDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -92,20 +93,9 @@ public class Category {
     @Override
     public int hashCode() {
         return Objects.hash(categoryId);
-    }
 
-    // toString personalizado sin navegación a objetos relacionados (solo IDs y tamaño de colecciones)
-
-    @Override
-    public String toString() {
-        return "Category{" +
-                "categoryId=" + categoryId +
-                ", parentId=" + (parent != null ? parent.getCategoryId() : null) +
-                ", name='" + name + '\'' +
-                ", slug='" + slug + '\'' +
-                ", isRoot=" + isRootCategory() +
-                ", subcategoriesCount=" + (subcategories != null ? subcategories.size() : 0) +
-                ", productsCount=" + (products != null ? products.size() : 0) +
-                '}';
     }
 }
+
+
+

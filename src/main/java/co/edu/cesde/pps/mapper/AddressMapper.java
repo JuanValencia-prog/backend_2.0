@@ -2,6 +2,10 @@ package co.edu.cesde.pps.mapper;
 
 import co.edu.cesde.pps.dto.AddressDTO;
 import co.edu.cesde.pps.model.Address;
+
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +18,7 @@ import java.util.stream.Collectors;
  * - Manejar null safety
  * - Extraer userId de la relación User
  */
+@Component
 public class AddressMapper {
 
     /**
@@ -30,7 +35,7 @@ public class AddressMapper {
         AddressDTO dto = new AddressDTO();
         dto.setAddressId(address.getAddressId());
 
-        // Extraer userId de la relación
+        // Extraer userId de la relación (null-safe)
         if (address.getUser() != null) {
             dto.setUserId(address.getUser().getUserId());
         }
@@ -42,7 +47,9 @@ public class AddressMapper {
         dto.setState(address.getState());
         dto.setCountry(address.getCountry());
         dto.setPostalCode(address.getPostalCode());
-        dto.setIsDefault(address.getIsDefault());
+
+        // Evitar posibles NPE con Boolean
+        dto.setIsDefault(address.getIsDefault() != null ? address.getIsDefault() : false);
 
         return dto;
     }
@@ -50,7 +57,8 @@ public class AddressMapper {
     /**
      * Convierte AddressDTO a Address Entity.
      *
-     * NOTA: No convierte User, eso se maneja en el servicio.
+     * NOTA:
+     * - NO convierte User (se maneja en el service)
      *
      * @param dto DTO a convertir
      * @return Address Entity o null si dto es null
@@ -62,7 +70,8 @@ public class AddressMapper {
 
         Address address = new Address();
         address.setAddressId(dto.getAddressId());
-        // User se debe asignar en el servicio
+
+        // User se asigna en el servicio
         address.setType(dto.getType());
         address.setLine1(dto.getLine1());
         address.setLine2(dto.getLine2());
@@ -70,7 +79,9 @@ public class AddressMapper {
         address.setState(dto.getState());
         address.setCountry(dto.getCountry());
         address.setPostalCode(dto.getPostalCode());
-        address.setIsDefault(dto.getIsDefault());
+
+        // Null safety para Boolean
+        address.setIsDefault(dto.getIsDefault() != null ? dto.getIsDefault() : false);
 
         return address;
     }
@@ -83,7 +94,7 @@ public class AddressMapper {
      */
     public List<AddressDTO> toDTOList(List<Address> addresses) {
         if (addresses == null) {
-            return List.of();
+            return new ArrayList<>();
         }
 
         return addresses.stream()
@@ -99,7 +110,7 @@ public class AddressMapper {
      */
     public List<Address> toEntityList(List<AddressDTO> dtos) {
         if (dtos == null) {
-            return List.of();
+            return new ArrayList<>();
         }
 
         return dtos.stream()

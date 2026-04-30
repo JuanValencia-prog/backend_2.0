@@ -151,22 +151,5 @@ public class Order {
         return Objects.hash(orderId);
     }
 
-    // toString personalizado sin navegación a objetos relacionados (solo IDs y tamaño de colección)
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "orderId=" + orderId +
-                ", orderNumber='" + orderNumber + '\'' +
-                ", user=" + (user != null ? user.getUserId() : null) +
-                ", orderStatus=" + (orderStatus != null ? orderStatus.getOrderStatusId() : null) +
-                ", shippingAddress=" + (shippingAddress != null ? shippingAddress.getAddressId() : null) +
-                ", billingAddress=" + (billingAddress != null ? billingAddress.getAddressId() : null) +
-                ", subtotal=" + subtotal +
-                ", tax=" + tax +
-                ", shippingCost=" + shippingCost +
-                ", total=" + total +
-                ", createdAt=" + createdAt +
-                '}';
-    }
 }
