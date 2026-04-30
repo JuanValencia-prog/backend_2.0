@@ -158,7 +158,7 @@ public class DemoDataSeeder implements ApplicationRunner {
     }
 
     private Role upsertRole(String name, String description) {
-        Role role = roleRepository.findByNameIgnoreCase(name)
+        Role role = RoleRepository.findByNameIgnoreCase(name)
                 .orElseGet(Role::new);
         role.setName(name);
         role.setDescription(description);

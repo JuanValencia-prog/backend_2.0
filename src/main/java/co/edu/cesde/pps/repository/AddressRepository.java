@@ -1,5 +1,4 @@
 package co.edu.cesde.pps.repository;
-
 import co.edu.cesde.pps.model.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,4 +17,3 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
     @Query("update Address a set a.isDefault = false where a.user.userId = :userId")
     void unsetDefaultByUserId(@Param("userId") Long userId);
 }
-
