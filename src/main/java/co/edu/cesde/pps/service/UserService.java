@@ -78,7 +78,7 @@ public class UserService {
         }
 
         // Crear usuario
-        Role defaultRole = roleRepository.findByNameIgnoreCase("CUSTOMER")
+        Role defaultRole = RoleRepository.findByNameIgnoreCase("CUSTOMER")
                 .orElseThrow(() -> new EntityNotFoundException("Role", "CUSTOMER"));
 
         User user = User.builder()
@@ -309,7 +309,7 @@ public class UserService {
     private Role resolveRoleOrThrow(String roleName) {
         ValidationUtils.validateNotBlank(roleName, "role");
         String normalizedRole = roleName.trim().toUpperCase(Locale.ROOT);
-        return roleRepository.findByNameIgnoreCase(normalizedRole)
+        return RoleRepository.findByNameIgnoreCase(normalizedRole)
                 .orElseThrow(() -> new EntityNotFoundException("Role", normalizedRole));
     }
 
